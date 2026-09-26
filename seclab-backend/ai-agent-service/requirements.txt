@@ -1,0 +1,10 @@
+fastapi==0.115.0
+uvicorn[standard]==0.31.0
+# socks extra：本机设了 ALL_PROXY=socks5://... 时，httpx 构造客户端就会抛 ImportError
+httpx[socks]==0.27.0
+docker==7.1.0
+python-dotenv==1.0.1
+sse-starlette==2.1.0
+pydantic>=2.9.0
+PyMySQL==1.1.1
+cryptography==48.0.0

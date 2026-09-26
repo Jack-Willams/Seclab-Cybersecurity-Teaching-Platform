@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#app {
+  min-height: 100%;
+  /* 原来写的是 hsl(var(--b1))，但 daisyUI 4 的 token 是 oklch 三元组，
+     hsl() 套 oklch 值解析失败 —— 这条规则一直是失效的。顺手改对。 */
+  background-color: oklch(var(--b1));
+}
+
+body {
+  color: oklch(var(--bc));
+}
+
+/* ============================================================
+   ① 暗色模式的层级：用「亮度」而不是「阴影」
+   实测线上暗色下页面和卡片都是 oklch(0.2077…)，同色 + 无边框，
+   而阴影是 rgba(0,0,0,.1) —— 近黑底上的黑色阴影不可见，
+   所以卡片根本没浮起来。这里把卡片补上描边和更深的投影。
+   ============================================================ */
+[data-theme='night'] .card.bg-base-100,
+[data-theme='night'] .stats.bg-base-100,
+[data-theme='night'] section.bg-base-100 {
+  border: 1px solid oklch(var(--bc) / 0.1);
+  box-shadow: 0 16px 40px -24px rgb(0 0 0 / 0.75);
+}
+
+/* 卡片内部的 base-200 区块在更亮的卡面上会显得"凹进去"，正是想要的效果，
+   但纯色块边界太硬，加一点描边让它更干净 */
+[data-theme='night'] .card.bg-base-100 .bg-base-200 {
+  border: 1px solid oklch(var(--bc) / 0.06);
+}
+
+/* ============================================================
+   ② 封面完整展示
+   这里原来做过一版「封面统一化」：16 张封面来自不同来源、明暗不一，
+   于是给下沿压一层和卡面同色的 scrim，暗色下再整图 brightness(0.9)，
+   想让白底图（SQL Injection 那张）别在暗色界面里太扎眼。
+
+   撤掉了。代价比收益大：
+   - scrim 把图片下沿糊成一片虚影，白底图的标题字被吃掉一截，看着像没加载完；
+   - brightness(0.9) 叠在本来就偏暗的 night 主题上，投影仪再压一道暗部，白的都发灰。
+   现在封面按原图 1:1 显示，下沿是一条干净的硬边。
+   要"别抢视线"靠的是卡片本身的层级（标题/描述/按钮），不是把图糊掉。
+
+   放在全局而不是组件 scoped 块里 —— scoped 下 :global() 会把后半截选择器吃掉。
+   ============================================================ */
+.cover img {
+  transition: transform 0.5s ease;
+}
+
+.card:hover .cover img {
+  transform: scale(1.06);
+}
+
+/* 滚动期间屏蔽 :hover —— 修「快速滑动时画面轻微缩放抖动」
+   鼠标不动、卡片从光标底下逐张扫过时，每张都会瞬间命中一次 :hover，
+   上面这条 scale(1.06) 的 0.5s 过渡刚起步就被反向打断，整屏看着像抖了一下。
+   把滚动子树的指针事件关掉，:hover 就匹配不上，抖动源头直接消失。
+   规则必须放全局：class 由 layout/User/index.vue 打在滚动容器上，
+   而受影响的卡片在各个页面组件里，scoped 样式够不着。
+   容器自身保留 pointer-events，否则它收不到 wheel 事件就没法滚了。 */
+.is-scrolling * {
+  pointer-events: none;
+}
+
+/* ⑤ 顶栏分隔线不在这里加 —— Header.vue 自己的 <style> 里本来就写了
+   `.navbar { border-bottom: 1px solid rgba(var(--color-base-content), .1) }`，
+   只是变量名是 daisyUI 3 时代的旧写法，在 4 里根本不存在，
+   于是整条声明「在计算值阶段失效」，border-style 退回 none、宽度算成 0。
+   把变量改对之后这条线自己就出来了（见 ⑨）。 */
+
+/* ============================================================
+   ⑥ 次要文字对比度
+   实测 base-content/50 在 #0f172a 上只有 3.64:1（WCAG 正文要求 4.5:1），
+   提到 /70 = 5.88:1。/30 /40 都是装饰性图标，不动。
+   ============================================================ */
+[data-theme='night'] .text-base-content\/50 {
+  color: oklch(var(--bc) / 0.7);
+}

@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: command-inject-web-1
+    build: .
+    image: command-inject
+    restart: always
+    ports:
+      - "8090:80"
+    environment:
+      - FLAG=ZmxhZ3t5MHVfZDFkX0BfR28wZF9qMGIhXX0= 
+      - SECLAB_COMMAND_HOOK_ENABLED=true
+      - SECLAB_AGENT_URL=http://host.docker.internal:8010
+      - SECLAB_COMMAND_SOURCE=hook
+      - SECLAB_CONTAINER_NAME=cmd-inject-web-1
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: user-service
+  cloud:
+    discovery:
+      enabled: ${USER_SERVICE_DISCOVERY_ENABLED:false}
+  datasource:
+    url: jdbc:mysql://${USER_SERVICE_DB_HOST:${MYSQL_HOST:localhost}}:${USER_SERVICE_DB_PORT:${MYSQL_PORT:3306}}/${USER_SERVICE_DB_NAME:userservice}?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8
+    username: ${USER_SERVICE_DB_USERNAME:${MYSQL_USER:seclab_app}}
+    password: ${USER_SERVICE_DB_PASSWORD:${MYSQL_PASSWORD:Seclab@123}}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 8083
+  address: 0.0.0.0
+
+eureka:
+  client:
+    enabled: ${USER_SERVICE_EUREKA_ENABLED:false}
+    service-url:
+      defaultZone: ${USER_SERVICE_EUREKA_DEFAULT_ZONE:http://localhost:8080/eureka/}
+    register-with-eureka: ${USER_SERVICE_EUREKA_REGISTER:false}
+    fetch-registry: ${USER_SERVICE_EUREKA_FETCH:false}
+  instance:
+    prefer-ip-address: true
+    hostname: localhost
+
+seclab:
+  cors:
+    allowed-origin-patterns: ${USER_SERVICE_CORS_ALLOWED_ORIGIN_PATTERNS:http://localhost:5173,http://localhost:5174,http://127.0.0.1:5173,http://127.0.0.1:5174}
+  jwt:
+    secret: ${USER_SERVICE_JWT_SECRET:SecLabUserServiceJwtSecretChangeMeAtLeast32Chars}
+    expire-millis: ${USER_SERVICE_JWT_EXPIRE_MILLIS:604800000}

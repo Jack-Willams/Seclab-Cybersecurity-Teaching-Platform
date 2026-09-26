@@ -1,0 +1,284 @@
+/* 亮色主题 CSS for SQL注入靶场 */
+:root {
+  --background-color: #f5f7fa;
+  --text-color: #333333;
+  --primary-color: #3b82f6;
+  --secondary-color: #64748b;
+  --accent-color: #10b981;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  --success-color: #10b981;
+  --card-background: #ffffff;
+  --border-color: #e2e8f0;
+  --input-background: #f8fafc;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: var(--card-background);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-color);
+  margin-top: 0;
+}
+
+h1 {
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+button, .btn {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover, .btn:hover {
+  background-color: #2563eb;
+}
+
+input[type="text"], input[type="password"], textarea, select {
+  background-color: var(--input-background);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 8px;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  background-color: rgba(226, 232, 240, 0.5);
+}
+
+tr:hover {
+  background-color: rgba(241, 245, 249, 0.5);
+}
+
+.card {
+  background-color: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.search-form {
+  background-color: rgba(241, 245, 249, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 20px 0;
+}
+
+.query {
+  font-family: monospace;
+  background-color: #f1f5f9;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 12px;
+  overflow-x: auto;
+  margin: 16px 0;
+  color: #334155;
+}
+
+.error {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 16px 0;
+  border-left: 4px solid var(--error-color);
+}
+
+.hint {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-left: 4px solid var(--accent-color);
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.challenge-info {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-left: 4px solid var(--primary-color);
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.nav {
+  margin-top: 20px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: var(--border-color);
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--accent-color);
+  transition: width 0.3s;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-primary {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #93c5fd;
+}
+
+.badge-success {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+
+.badge-warning {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+}
+
+.badge-error {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+}
+
+code {
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  background-color: #f1f5f9;
+  color: #334155;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+/* Step by step challenge styles */
+.challenge-steps {
+  counter-reset: step;
+  margin: 20px 0;
+}
+
+.step {
+  position: relative;
+  padding-left: 40px;
+  margin-bottom: 20px;
+}
+
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.step-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #93c5fd;
+}
+
+.step-content {
+  margin-bottom: 12px;
+}
+
+.step-action {
+  margin-top: 8px;
+}
+
+/* For the secret text that's revealed on hover */
+.secret {
+  color: var(--card-background);
+  background-color: var(--card-background);
+  padding: 4px;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.secret:hover {
+  color: var(--text-color);
+  background-color: rgba(75, 85, 99, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .container {
+    padding: 12px;
+  }
+  
+  .search-form {
+    padding: 12px;
+  }
+  
+  .step {
+    padding-left: 32px;
+  }
+} 

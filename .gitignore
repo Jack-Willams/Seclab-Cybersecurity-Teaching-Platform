@@ -1,0 +1,98 @@
+# Frontend dependencies and build output
+node_modules/
+dist/
+dist-ssr/
+.vite/
+.yarn/
+*.local
+
+# Runtime env files: commit examples only
+.env
+.env.local
+.env.*.local
+!*.env.example
+
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+SecLab-FrontEnd-2/public/video/
+
+# Runtime uploads and generated assets
+seclab-backend/upload-dir/
+uploads/
+
+# Duplicate exported copies; keep the canonical SQL files in 数据库文件/
+seclab/*.sql
+
+# Duplicate lab-container snapshot; keep seclab-backend/*-lab instead
+项目容器文件/
+
+# Java / Gradle
+build/
+out/
+bin/
+*.class
+*.jar
+*.war
+.gradle/
+.classpath
+.project
+.settings/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+.eggs/
+venv/
+.venv/
+env/
+
+# Logs and crash dumps
+*.log
+logs/
+hs_err_pid*.log
+replay_pid*.log
+
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+*.swp
+*.swo
+*~
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Model/cache/archive files
+gpt2_model_cache/
+*.bin
+*.pt
+*.pth
+*.zip
+*.rar
+*.7z
+
+# Backups
+*.bak
+backup/
+
+# local generated files
+seclab-backend/experiment-module-service/.gradle-user-home/
+tmp-selenium/
+tmp-gradle-home/
+
+# Agent / assistant local config
+.claude/

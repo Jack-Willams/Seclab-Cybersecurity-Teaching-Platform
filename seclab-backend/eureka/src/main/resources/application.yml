@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: "eureka"
+  cloud:
+    inetutils:
+      preferred-networks: 192.168.10.106
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: "http://localhost:8080/eureka/"
+  instance:
+    prefer-ip-address: true
+    instance-id: "eureka-service"
+    ip-address: "192.168.10.106"

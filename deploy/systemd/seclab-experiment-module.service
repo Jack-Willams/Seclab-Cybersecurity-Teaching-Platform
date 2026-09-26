@@ -1,0 +1,20 @@
+[Unit]
+Description=SecLab Experiment Module Service
+After=network.target seclab-mysql.service
+
+[Service]
+Type=simple
+User=seclab
+WorkingDirectory=/opt/seclab/SecLab/seclab-backend
+Environment=MYSQL_HOST=127.0.0.1
+Environment=MYSQL_PORT=3306
+Environment=MYSQL_USER=seclab_app
+Environment=MYSQL_PASSWORD=Seclab@123
+ExecStart=/bin/bash -lc 'exec java -jar /opt/seclab/SecLab/seclab-backend/experiment-module-service/build/libs/*.jar'
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/opt/seclab/logs/experiment-module.log
+StandardError=append:/opt/seclab/logs/experiment-module.err.log
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  ai-agent-service:
+    build: .
+    container_name: seclab-ai-agent
+    restart: unless-stopped
+    ports:
+      - "8010:8010"
+    env_file:
+      - .env
+    volumes:
+      # 挂载宿主机 Docker socket，使服务可通过 SDK 管理靶场容器
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - seclab-net
+
+networks:
+  seclab-net:
+    driver: bridge
+

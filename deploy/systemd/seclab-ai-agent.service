@@ -1,0 +1,18 @@
+[Unit]
+Description=SecLab AI Agent Service
+After=network.target docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+User=seclab
+WorkingDirectory=/opt/seclab/SecLab/seclab-backend/ai-agent-service
+Environment=PATH=/opt/seclab/SecLab/seclab-backend/ai-agent-service/venv/bin
+ExecStart=/opt/seclab/SecLab/seclab-backend/ai-agent-service/venv/bin/uvicorn main:app --host 127.0.0.1 --port 8010
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/opt/seclab/logs/ai-agent.log
+StandardError=append:/opt/seclab/logs/ai-agent.err.log
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,43 @@
+# ════════════════════════════════════════════════════════════════
+#  Protocol Analysis Lab Docker Compose Configuration
+#  协议分析实验靶场 - Docker 编排配置
+# ════════════════════════════════════════════════════════════════
+
+services:
+  web:
+    image: protocol-analysis-lab-web:latest
+    build: .
+    ports:
+      - "8896:80"
+    volumes:
+      - ./web:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - protocol-analysis-net
+    environment:
+      - DB_HOST=db
+      - DB_NAME=protocol_lab
+      - DB_USER=root
+      - DB_PASS=123456
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: protocol_lab
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - protocol-analysis-net
+
+volumes:
+  dbdata:
+
+networks:
+  protocol-analysis-net:

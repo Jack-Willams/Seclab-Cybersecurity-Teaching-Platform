@@ -1,0 +1,19 @@
+{
+  "name": "seclab-docker-api",
+  "version": "1.0.0",
+  "description": "Docker API服务器，用于管理SecLab实验环境的Docker容器",
+  "main": "docker-api-server.js",
+  "scripts": {
+    "start": "node docker-api-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dockerode": "^5.0.0",
+    "express": "^4.22.1"
+  },
+  "keywords": [],
+  "type": "commonjs"
+}

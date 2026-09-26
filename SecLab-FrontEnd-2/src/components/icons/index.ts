@@ -1,0 +1,6 @@
+export { default as HomeIcon } from './HomeIcon.vue'
+export { default as UsersIcon } from './UsersIcon.vue'
+export { default as BookOpenIcon } from './BookOpenIcon.vue'
+export { default as ChartBarIcon } from './ChartBarIcon.vue'
+export { default as CogIcon } from './CogIcon.vue'
+export { default as ShieldCheckIcon } from './ShieldCheckIcon.vue' 

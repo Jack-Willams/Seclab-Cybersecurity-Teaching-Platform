@@ -1,0 +1,89 @@
+/*
+ * 教师端过渡样式表。
+ *
+ * 原版把颜色写死成 #fff / #14213d 之类，教师端因此完全不响应 useTheme 写在
+ * <html> 上的 data-theme —— 学生端切到 night 变深色，教师端纹丝不动，
+ * 这就是两端观感割裂的根因。
+ *
+ * 这里先把颜色换成 daisyUI 语义变量，让还没迁移的页面也能跟随主题；页面正在
+ * 逐个换成 daisyUI 组件类（课程库已完成），五个页面全部迁完后本文件即可删除。
+ */
+/* min-height 用 100% 而不是 100vh：容器 .teacher-main 本身就是 100dvh，
+   再给内容强加一个 100vh 会比容器高出一个 padding 的量，凭空多出一根滚动条。
+   另外 4 个教师页用的是 Tailwind 的 min-h-full，这里对齐它们。 */
+.teacher-page { max-width: 1540px; min-height: 100%; margin: 0 auto; padding: 34px 38px 60px; }
+.page-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 26px; }
+.page-head h1 { margin: 0; color: oklch(var(--bc)); font-size: 26px; font-weight: 750; letter-spacing: -.02em; }
+.page-head p { margin: 7px 0 0; color: oklch(var(--bc) / .65); font-size: 13px; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.primary-button, .secondary-button, .quiet-button, .danger-button { display: inline-flex; min-height: 38px; align-items: center; justify-content: center; gap: 7px; padding: 0 15px; border: 1px solid transparent; border-radius: var(--rounded-btn, .5rem); font-size: 13px; font-weight: 650; cursor: pointer; transition: .15s ease; }
+.primary-button { background: oklch(var(--p)); color: oklch(var(--pc)); }
+.primary-button:hover { background: oklch(var(--p) / .85); }
+.secondary-button { border-color: oklch(var(--bc) / .2); background: oklch(var(--b1)); color: oklch(var(--bc) / .8); }
+.secondary-button:hover { border-color: oklch(var(--bc) / .4); }
+.quiet-button { background: oklch(var(--p) / .12); color: oklch(var(--p)); }
+.danger-button { border-color: oklch(var(--er) / .35); background: oklch(var(--b1)); color: oklch(var(--er)); }
+/* 限定在教师端容器内：原来是裸的 button:disabled，任一教师页加载后就全局生效 */
+.teacher-page button:disabled { cursor: not-allowed; opacity: .55; }
+.panel { border: 1px solid oklch(var(--bc) / .12); border-radius: var(--rounded-box, 1rem); background: oklch(var(--b1)); box-shadow: 0 1px 3px oklch(var(--bc) / .06); }
+
+/* 面板入场动画 —— 对齐学生端卡片的 animate-slide-up，教师端原来是硬切上屏。
+   .panel 是五个教师页共用的容器，写在这里一次覆盖全部，不用逐页改。
+   只动 opacity/transform（合成器属性，不触发重排）。
+   阶梯延迟只做到第 5 个就封顶：再往后加会让长页面的末尾面板等太久，
+   反而显得卡。nth-child 是按同级元素位置数的，面板不是直接兄弟时退化成同时入场，
+   这个降级可以接受。 */
+@keyframes teacherPanelIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+
+.panel { animation: teacherPanelIn .42s cubic-bezier(.16, 1, .3, 1) both; }
+.panel:nth-child(2) { animation-delay: .05s; }
+.panel:nth-child(3) { animation-delay: .1s; }
+.panel:nth-child(4) { animation-delay: .15s; }
+.panel:nth-child(n+5) { animation-delay: .2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation: none; }
+}
+.panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; border-bottom: 1px solid oklch(var(--bc) / .1); }
+.panel-head h2 { margin: 0; font-size: 15px; font-weight: 720; }
+.panel-head p { margin: 4px 0 0; color: oklch(var(--bc) / .6); font-size: 12px; }
+.field { display: grid; gap: 6px; }
+.field label { color: oklch(var(--bc) / .7); font-size: 12px; font-weight: 650; }
+.field input, .field select, .field textarea, .filter-control { width: 100%; min-height: 39px; padding: 8px 11px; border: 1px solid oklch(var(--bc) / .2); border-radius: var(--rounded-btn, .5rem); outline: none; background: oklch(var(--b1)); color: oklch(var(--bc)); font-size: 13px; }
+.field input:focus, .field select:focus, .field textarea:focus, .filter-control:focus { border-color: oklch(var(--p)); box-shadow: 0 0 0 3px oklch(var(--p) / .15); }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th { padding: 11px 15px; border-bottom: 1px solid oklch(var(--bc) / .12); background: oklch(var(--b2)); color: oklch(var(--bc) / .6); font-size: 11px; font-weight: 700; text-align: left; white-space: nowrap; }
+.data-table td { padding: 13px 15px; border-bottom: 1px solid oklch(var(--bc) / .08); color: oklch(var(--bc) / .85); font-size: 13px; vertical-align: middle; }
+.data-table tbody tr:last-child td { border-bottom: 0; }
+.muted { color: oklch(var(--bc) / .6); }
+.subtle { color: oklch(var(--bc) / .55); font-size: 12px; }
+.status-dot { display: inline-block; width: 7px; height: 7px; margin-right: 6px; border-radius: 50%; background: oklch(var(--su)); }
+.tag { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 999px; background: oklch(var(--p) / .12); color: oklch(var(--p)); font-size: 11px; font-weight: 650; }
+.tag.gray { background: oklch(var(--bc) / .1); color: oklch(var(--bc) / .65); }
+.tag.amber { background: oklch(var(--wa) / .15); color: oklch(var(--wa)); }
+.empty-state { padding: 52px 24px; color: oklch(var(--bc) / .6); text-align: center; }
+.empty-state strong { display: block; margin-bottom: 6px; color: oklch(var(--bc)); font-size: 15px; }
+.loading-state, .error-state { padding: 34px; text-align: center; }
+.loading-state { color: oklch(var(--bc) / .65); }
+.error-state { color: oklch(var(--er)); }
+.modal-layer { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 22px; background: oklch(var(--n) / .5); }
+.modal-card { width: min(620px, 100%); max-height: calc(100vh - 44px); overflow: auto; border-radius: var(--rounded-box, 1rem); background: oklch(var(--b1)); box-shadow: 0 24px 80px oklch(var(--n) / .35); }
+.modal-head { display: flex; align-items: center; justify-content: space-between; padding: 19px 22px; border-bottom: 1px solid oklch(var(--bc) / .12); }
+.modal-head h2 { margin: 0; font-size: 17px; }
+.modal-head button { border: 0; background: none; color: oklch(var(--bc) / .6); font-size: 20px; cursor: pointer; }
+.modal-body { display: grid; gap: 17px; padding: 22px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 22px; border-top: 1px solid oklch(var(--bc) / .12); }
+.notice { padding: 11px 13px; border: 1px solid oklch(var(--in) / .3); border-radius: var(--rounded-btn, .5rem); background: oklch(var(--in) / .1); color: oklch(var(--in)); font-size: 12px; }
+.notice.error { border-color: oklch(var(--er) / .3); background: oklch(var(--er) / .1); color: oklch(var(--er)); }
+
+/* 断点跟随布局的 lg（1024px）：侧边栏在这个宽度以下收成抽屉，内容区同时换紧凑内边距 */
+@media (max-width: 1023px) {
+  .teacher-page { padding: 22px 16px 44px; }
+  .page-head { flex-direction: column; }
+  .toolbar { width: 100%; }
+  .data-table-wrap { overflow-x: auto; }
+  .panel-head { align-items: flex-start; }
+}

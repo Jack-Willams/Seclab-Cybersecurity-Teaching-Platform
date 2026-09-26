@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: docker-service
+
+server:
+  port: 8087
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8080/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    ip-address: host.docker.internal
+logging:
+  level:
+    org.springframework.web: debug

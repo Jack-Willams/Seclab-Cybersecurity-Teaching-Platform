@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>命令注入漏洞挑战</title>
+  <style>
+    /* 保持原有样式不变 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Microsoft YaHei", sans-serif;
+    }
+    body {
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+    }
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #000;
+      border-bottom: 4px double #000;
+      padding-bottom: 10px;
+    }
+    .steps {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .step-btn {
+      flex: 1;
+      min-width: 120px;
+      text-align: center;
+      padding: 12px 0;
+      background: #ccc;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: all 0.3s;
+    }
+    .step-btn.active {
+      background: #409eff;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(64, 158, 255, 0.3);
+    }
+    .step-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      display: none;
+      margin-bottom: 20px;
+    }
+    .step-content.active {
+      display: block;
+      animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .step-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: #303133;
+      display: flex;
+      align-items: center;
+    }
+    .step-title::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 20px;
+      background: #409eff;
+      margin-right: 10px;
+      border-radius: 3px;
+    }
+    .step-desc {
+      margin-bottom: 20px;
+      color: #606266;
+      padding-left: 16px;
+    }
+    .target-box {
+      background: #f8f9fd;
+      border-left: 4px solid #faad14;
+      padding: 12px 15px;
+      margin: 15px 0 25px 16px;
+      border-radius: 0 4px 4px 0;
+    }
+    .target-box strong {
+      color: #faad14;
+    }
+    .input-group {
+      margin-bottom: 20px;
+      padding-left: 16px;
+    }
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #303133;
+    }
+    .input-group input {
+      width: 100%;
+      max-width: 500px;
+      padding: 10px 12px;
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+    .input-group input:focus {
+      border-color: #409eff;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.2);
+    }
+    .input-group button {
+      padding: 10px 20px;
+      background: #409eff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+    .input-group button:hover {
+      background: #66b1ff;
+    }
+    .result-box {
+      margin: 15px 0 15px 16px;
+      padding: 15px;
+      background: #f0f9eb;
+      border: 1px solid #b7eb8f;
+      border-radius: 4px;
+      display: none;
+    }
+    .result-box.active {
+      display: block;
+    }
+    .result-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #52c41a;
+    }
+    .hint-btn {
+      padding: 8px 15px;
+      background: #f0f0f0;
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 0 0 10px 16px;
+      transition: all 0.3s;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .hint-btn:hover {
+      background: #e6e6e6;
+    }
+    .hint-content {
+      display: none;
+      padding: 15px;
+      background: #fff9e6;
+      border: 1px dashed #ffd666;
+      border-radius: 4px;
+      margin: 0 0 20px 16px;
+      line-height: 1.6;
+    }
+    .hint-content code {
+      background: rgba(255, 223, 146, 0.3);
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .skill-box {
+      margin: 20px 0 0 16px;
+      padding: 15px;
+      background: #f8f9fd;
+      border-radius: 4px;
+    }
+    .skill-box h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #1890ff;
+    }
+    .skill-box ul {
+      list-style: inside;
+      line-height: 1.8;
+      color: #606266;
+    }
+    .skill-box code {
+      color: #f5222d;
+      background: rgba(245, 34, 45, 0.1);
+      padding: 2px 4px;
+      border-radius: 2px;
+      font-family: monospace;
+    }
+    .flag-box {
+      margin: 20px 0 0 16px;
+      padding: 15px;
+      background: #fff1f0;
+      border-radius: 4px;
+      border-left: 4px solid #ffd666;
+      display: none;
+    }
+    .flag-box.active {
+      display: block;
+    }
+    
+    /* 添加当前靶机URL样式 */
+    .current-url-box {
+      background: #1e293b;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #e2e8f0;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .current-url-label {
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    
+    .current-url-value {
+      color: #38bdf8;
+      font-family: monospace;
+      flex-grow: 1;
+    }
+    
+    .url-action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .url-action-button {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 5px;
+    }
+    
+    .url-action-button:hover {
+      color: #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="current-url-box">
+      <span class="current-url-label">当前靶机URL:</span>
+      <span class="current-url-value" id="currentUrlValue">http://192.168.1.106:8090</span>
+      <div class="url-action-buttons">
+        <button class="url-action-button" onclick="copyCurrentUrl()">📋 复制</button>
+        <button class="url-action-button" onclick="openCurrentUrl()">🔗 打开</button>
+      </div>
+    </div>
+    
+    <div class="title">命令注入漏洞挑战</div>
+
+    <div class="header">
+      <h1>命令注入漏洞实验</h1>
+      <div class="url-box">
+        <span class="url-label">实验地址�?/span>
+        <a href="index.html" target="_blank">http://192.168.1.106:8090</a>
+        <button class="copy-btn" onclick="copyToClipboard('http://192.168.1.106:8090')">复制</button>
+      </div>
+    </div>
+
+    <div class="steps">
+      <button class="step-btn active" onclick="switchStep(0)">�?�?/button>
+      <button class="step-btn" onclick="switchStep(1)">�?�?/button>
+      <button class="step-btn" onclick="switchStep(2)">�?�?/button>
+    </div>
+
+    <!-- 步骤1：Ping本地地址 -->
+    <div class="step-content active" id="step0">
+      <div class="step-title">基础命令注入 - 验证功能</div>
+      <div class="step-desc">
+        该页面提供了一个网络诊断功能，可以对指定IP地址执行ping命令。尝试使用这个功能测试本地环路地址的连通性�?      </div>
+      
+      <div class="target-box">
+        <strong>当前目标�?/strong>使用提供的功能成功ping�?27.0.0.1
+      </div>
+
+      <div class="input-group">
+        <label>请输入IP地址进行测试</label>
+        <!-- 移除原有的PHP代码，改为通过AJAX提交 -->
+        <form id="form0">
+          <input type="text" placeholder="例如�?92.168.1.1" name="ip" />
+          <input type="submit" value="执行测试">
+        </form>
+      </div>
+
+      <div class="result-box" id="result0">
+        <div class="result-title">执行结果�?/div>
+        <pre id="resultContent0"></pre>
+      </div>
+
+      <button class="hint-btn" onclick="toggleHint(0)">
+        <span>显示提示</span>
+      </button>
+      <div class="hint-content" id="hint0">
+        127.0.0.1是本地环路地址，通常用于测试本机网络功能是否正常<br>
+        直接输入 <code>127.0.0.1</code> 即可完成本步�?      </div>
+
+      <div class="skill-box">
+        <h3>命令注入基础知识</h3>
+        <ul>
+          <li>命令注入是指攻击者通过输入特殊构造的字符串，改变原有命令的执行逻辑</li>
+          <li>常见的命令分隔符有：<code>;</code>�?code>&</code>�?code>&&</code>�?code>|</code>�?code>||</code></li>
+          <li><code>;</code> 表示执行完前一个命令后，继续执行后一个命�?/li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 步骤2：执行whoami命令 -->
+    <div class="step-content" id="step1">
+      <div class="step-title">命令注入进阶 - 执行系统命令</div>
+      <div class="step-desc">
+        该功能在处理用户输入时存在安全缺陷，没有对输入内容进行严格过滤。尝试利用这个缺陷执行系统命令，查看当前运行用户�?      </div>
+      
+      <div class="target-box">
+        <strong>当前目标�?/strong>使用分号(;)作为命令分隔符，执行whoami命令查看当前用户
+      </div>
+
+      <div class="input-group">
+        <label>请输入IP地址进行测试</label>
+        <form id="form1">
+          <input type="text" placeholder="尝试构造特殊输�? name="ip" />
+          <input type="submit" value="执行测试">
+        </form>
+      </div>
+
+      <div class="result-box" id="result1">
+        <div class="result-title">执行结果�?/div>
+        <pre id="resultContent1"></pre>
+      </div>
+
+      <button class="hint-btn" onclick="toggleHint(1)">
+        <span>显示提示</span>
+      </button>
+      <div class="hint-content" id="hint1">
+        可以在正常IP地址后面添加分号和想要执行的命令<br>
+        尝试输入�?code>127.0.0.1; whoami</code><br>
+        这个输入会先执行ping命令，然后执行whoami命令
+      </div>
+
+      <div class="skill-box">
+        <h3>命令分隔符说�?/h3>
+        <ul>
+          <li><code>command1; command2</code>：无论command1是否成功，都执行command2</li>
+          <li><code>command1 && command2</code>：只有command1成功执行，才会执行command2</li>
+          <li><code>command1 || command2</code>：只有command1执行失败，才会执行command2</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 步骤3：读取flag文件 -->
+    <div class="step-content" id="step2">
+      <div class="step-title">命令注入利用 - 获取敏感信息</div>
+      <div class="step-desc">
+        继续利用该漏洞，尝试读取系统中存储的敏感文件/flag，获取其中的内容作为挑战答案�?      </div>
+      
+      <div class="target-box">
+        <strong>当前目标�?/strong>使用命令注入漏洞读取/flag文件的内�?      </div>
+
+      <div class="input-group">
+        <label>请输入IP地址进行测试</label>
+        <form id="form2">
+          <input type="text" placeholder="构造注入命令读取文�? name="ip" />
+          <input type="submit" value="执行测试">
+        </form>
+      </div>
+
+      <div class="result-box" id="result2">
+        <div class="result-title">执行结果�?/div>
+        <pre id="resultContent2"></pre>
+      </div>
+
+      <div class="flag-box" id="flagBox">
+        <label>提交找到的Flag</label>
+        <form id="flagForm">
+          <input type="text" placeholder="例如：flag{xxx}" name="flagInput" />
+          <input type="submit" value="验证flag">
+        </form>
+        <div id="flagResult"></div>
+      </div>
+      
+
+      <button class="hint-btn" onclick="toggleHint(2)">
+        <span>显示提示</span>
+      </button>
+      <div class="hint-content" id="hint2">
+        在Linux系统中，可以使用cat命令读取文件内容<br>
+        尝试输入�?code>127.0.0.1; cat /flag</code><br>
+        这个命令会先执行ping，然后读�?flag文件的内�?      </div>
+
+      <div class="skill-box">
+        <h3>文件读取常用命令</h3>
+        <ul>
+          <li><code>cat filename</code>：查看文件内�?/li>
+          <li><code>more filename</code>：分页查看文件内�?/li>
+          <li><code>head filename</code>：查看文件头部内�?/li>
+          <li><code>tail filename</code>：查看文件尾部内�?/li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 切换步骤
+    function switchStep(index) {
+      document.querySelectorAll('.step-btn').forEach((btn) => btn.classList.remove('active'));
+      document.querySelectorAll('.step-content').forEach((content) => content.classList.remove('active'));
+      document.querySelectorAll('.step-btn')[index].classList.add('active');
+      document.querySelectorAll('.step-content')[index].classList.add('active');
+      
+      if (index === 2) {
+        document.getElementById('flagBox').classList.add('active');
+      }
+    }
+
+    // 切换提示显示
+    function toggleHint(index) {
+      const hint = document.getElementById(`hint${index}`);
+      hint.style.display = hint.style.display === 'none' || hint.style.display === '' ? 'block' : 'none';
+    }
+
+    // AJAX处理表单提交（通用函数�?    function handleFormSubmit(formId, resultContentId, step) {
+      const form = document.getElementById(formId);
+      form.addEventListener('submit', function(e) {
+        e.preventDefault(); // 阻止表单默认提交（不刷新页面�?        
+        const formData = new FormData(this);
+        // 添加步骤标识，方便后端区分处�?        formData.append('step', step);
+        
+        // 发送AJAX请求到后端PHP
+        fetch('handle.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => response.text())
+        .then(result => {
+          // 显示结果（不刷新页面�?          const resultBox = document.getElementById(`result${step}`);
+          const resultContent = document.getElementById(resultContentId);
+          resultBox.classList.add('active');
+          resultContent.textContent = result; // 将PHP返回的结果显示在页面�?        })
+        .catch(error => {
+          console.error('错误:', error);
+        });
+      });
+    }
+
+    // 绑定三个步骤的表单提交事�?    handleFormSubmit('form0', 'resultContent0', 0);
+    handleFormSubmit('form1', 'resultContent1', 1);
+    handleFormSubmit('form2', 'resultContent2', 2);
+
+    // 处理flag验证的表单提�?    document.getElementById('flagForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      formData.append('action', 'verifyFlag');
+      
+      fetch('handle.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text())
+      .then(result => {
+        document.getElementById('flagResult').textContent = result;
+      });
+    });
+
+    // 添加复制到剪贴板功能
+    function copyToClipboard(text) {
+      const tempInput = document.createElement('input');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      alert('已复制到剪贴�? ' + text);
+    }
+
+    // 添加复制当前靶机URL功能
+    function copyCurrentUrl() {
+      const currentUrlValue = document.getElementById('currentUrlValue').textContent;
+      copyToClipboard(currentUrlValue);
+    }
+
+    // 添加打开当前靶机URL功能
+    function openCurrentUrl() {
+      const currentUrlValue = document.getElementById('currentUrlValue').textContent;
+      window.open(currentUrlValue, '_blank');
+    }
+  </script>
+</body>
+</html>

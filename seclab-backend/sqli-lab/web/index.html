@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="0; url=index.php">
+    <title>正在跳转… | ByteShop SQLi Lab</title>
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .msg { text-align: center; }
+        .msg a { color: #3b82f6; }
+    </style>
+</head>
+<body>
+    <div class="msg">
+        <p>正在跳转到靶场…</p>
+        <p><a href="index.php">点击这里</a>如果没有自动跳转</p>
+    </div>
+    <script>window.location.href = 'index.php';</script>
+</body>
+</html>
+<!-- OLD CONTENT BELOW IS UNUSED - redirect above takes effect -->
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .current-url {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .current-url-label {
+            font-weight: bold;
+            color: #cbd5e1;
+        }
+        
+        .current-url-value {
+            color: #38bdf8;
+            font-family: monospace;
+        }
+        
+        .url-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .url-action-button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .url-action-button:hover {
+            color: #e2e8f0;
+        }
+        
+        .challenge-header {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        
+        .challenge-header h1 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #38bdf8;
+            border-bottom: none;
+        }
+        
+        .challenge-meta {
+            margin-bottom: 15px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .challenge-meta-item {
+            margin-bottom: 10px;
+        }
+        
+        .challenge-meta-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 80px;
+            color: #cbd5e1;
+        }
+        
+        .challenge-url {
+            background-color: #334155;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: monospace;
+            position: relative;
+            border: 1px solid #475569;
+        }
+        
+        .challenge-url .url-text {
+            cursor: pointer;
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        .challenge-url .url-text:hover {
+            text-decoration: underline;
+        }
+        
+        .action-buttons {
+            margin-top: 15px;
+        }
+        
+        .action-button {
+            background-color: #334155;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .action-button:hover {
+            background-color: #475569;
+        }
+        
+        .action-button.danger {
+            color: #f87171;
+        }
+        
+        .action-button.danger:hover {
+            background-color: #7f1d1d;
+        }
+        
+        .action-button i {
+            margin-right: 6px;
+        }
+        
+        .challenge-content {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        
+        .challenge-desc {
+            margin-bottom: 20px;
+        }
+        
+        .challenge-desc p {
+            margin-top: 0;
+            color: #cbd5e1;
+        }
+        
+        .flag-submit {
+            margin-top: 20px;
+        }
+        
+        .flag-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #334155;
+            color: #e2e8f0;
+        }
+        
+        .submit-btn {
+            background-color: #38bdf8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .hints {
+            background-color: #334155;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #475569;
+        }
+        
+        .hints h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #38bdf8;
+        }
+        
+        .hints ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+            color: #cbd5e1;
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #334155;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #38bdf8;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        .modal-btn {
+            padding: 6px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .modal-btn-cancel {
+            background-color: #475569;
+            color: #cbd5e1;
+        }
+        
+        .modal-btn-confirm {
+            background-color: #dc2626;
+            color: white;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background-color: #10b981;
+        }
+        
+        .status-offline {
+            background-color: #ef4444;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .difficulty-medium {
+            background-color: #f59e0b;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="current-url">
+            <span class="current-url-label">当前靶机URL:</span>
+            <span class="current-url-value" id="current-url-value">http://192.168.1.106:8091</span>
+            <div class="url-actions">
+                <button class="url-action-button" id="copy-url-btn">
+                    <span class="icon">📋</span>复制
+                </button>
+                <button class="url-action-button" id="open-url-btn">
+                    <span class="icon">🔗</span>打开
+                </button>
+            </div>
+        </div>
+        <div class="challenge-header">
+            <h1>SQL注入挑战</h1>
+            
+            <div class="challenge-meta">
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">难度:</span>
+                    <span class="difficulty difficulty-medium">中等</span>
+                </div>
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">状态</span>
+                    <span class="status-indicator status-online"></span>
+                    <span>在线</span>
+                </div>
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">端口:</span>
+                    <span>8091</span>
+                </div>
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">类型:</span>
+                    <span>Web安全</span>
+                </div>
+            </div>
+            
+            <div class="challenge-url">
+                <a href="index.php" class="url-text" id="challenge-link">http://192.168.1.106:8091</a>
+            </div>
+            
+            <div class="countdown">
+                <span class="timer-icon">�?/span>
+                <span>倒计时</span>
+                <span id="countdown-timer">1小时30�?0�?/span>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button" id="start-challenge-btn">
+                    <i class="icon">🚀</i>开始挑�?                </button>
+                <button class="action-button" id="show-hints-btn">
+                    <i class="icon">💡</i>查看提示
+                </button>
+                <button class="action-button" id="show-solution-btn">
+                    <i class="icon">🔍</i>查看解答
+                </button>
+                <button class="action-button danger" id="reset-btn">
+                    <i class="icon">🔄</i>重置环境
+                </button>
+            </div>
+        </div>
+        
+        <div class="challenge-content">
+            <div class="challenge-desc">
+                <h3>挑战描述</h3>
+                <p>这是一个SQL注入挑战，目标是利用SQL注入漏洞获取管理员账户信息，找到隐藏的flag�?/p>
+                <p>该网站存在SQL注入漏洞，你需要利用这个漏洞执行以下任务：</p>
+                <ol>
+                    <li>获取所有用户信�?/li>
+                    <li>获取数据库中的表�?/li>
+                    <li>获取管理员账户的密码</li>
+                    <li>获取隐藏的flag</li>
+                </ol>
+                
+                <h3>挑战目标</h3>
+                <ul>
+                    <li>完成4个递进的SQL注入挑战步骤</li>
+                    <li>学习SQL注入技�?/li>
+                    <li>掌握绕过过滤的方�?/li>
+                    <li>获取最终的Flag</li>
+                </ul>
+                
+                <h3>技术要�?/h3>
+                <ul>
+                    <li>基础SQL注入</li>
+                    <li>联合查询注入</li>
+                    <li>信息收集技�?/li>
+                    <li>数据库结构探�?/li>
+                    </ul>
+            </div>
+            
+            <div class="flag-submit">
+                <h3>提交Flag</h3>
+                <input type="text" class="flag-input" id="flag-input" placeholder="输入Flag格式: flag{...}">
+                <button class="submit-btn" id="submit-flag-btn">提交</button>
+            </div>
+            
+            <div class="hints">
+                <h3>提示</h3>
+                <ul>
+                    <li>尝试在登录框中使�?<code>'</code> �?<code>"</code> 触发SQL错误</li>
+                    <li>使用 <code>UNION SELECT</code> 语句获取更多信息</li>
+                    <li>使用 <code>information_schema</code> 获取数据库结�?/li>
+                    <li>尝试读取敏感表中的数�?/li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 重置确认弹窗 -->
+    <div class="modal" id="reset-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>确认重置</h3>
+                <button class="modal-close" id="close-modal-btn">&times;</button>
+            </div>
+            <p>确定要重置SQL注入实验环境吗？这将清除所有数据�?/p>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" id="cancel-reset-btn">取消</button>
+                <button class="modal-btn modal-btn-confirm" id="confirm-reset-btn">确认重置</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 获取DOM元素
+        const startChallengeBtn = document.getElementById('start-challenge-btn');
+        const showHintsBtn = document.getElementById('show-hints-btn');
+        const showSolutionBtn = document.getElementById('show-solution-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const submitFlagBtn = document.getElementById('submit-flag-btn');
+        const flagInput = document.getElementById('flag-input');
+        const resetModal = document.getElementById('reset-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const cancelResetBtn = document.getElementById('cancel-reset-btn');
+        const confirmResetBtn = document.getElementById('confirm-reset-btn');
+        const challengeLink = document.getElementById('challenge-link');
+        const copyUrlBtn = document.getElementById('copy-url-btn');
+        const openUrlBtn = document.getElementById('open-url-btn');
+        
+        // 复制到剪贴板
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                showNotification('已复制到剪贴�? ' + text, 'success');
+            }).catch(function(err) {
+                console.error('复制失败: ', err);
+                showNotification('复制失败，请手动复制', 'error');
+            });
+        }
+        
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            let iconClass = '�?;
+            if (type === 'success') iconClass = '�?;
+            if (type === 'info') iconClass = 'ℹ️';
+            if (type === 'warning') iconClass = '⚠️';
+            if (type === 'error') iconClass = '�?;
+            
+            notification.innerHTML = `
+                <span class="notification-icon">${iconClass}</span>
+                <div class="notification-content">${message}</div>
+                <button class="notification-close">&times;</button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            notification.querySelector('.notification-close').addEventListener('click', function() {
+                document.body.removeChild(notification);
+            });
+            
+            setTimeout(function() {
+                if (notification.parentNode) {
+                    document.body.removeChild(notification);
+                }
+            }, 3000);
+        }
+        
+        // 事件监听
+        startChallengeBtn.addEventListener('click', function() {
+            window.open('index.php', '_blank');
+        });
+        
+        showHintsBtn.addEventListener('click', function() {
+            showNotification('提示：尝试在登录名中输入 admin\' -- �?admin\' OR \'1\'=\'1', 'info');
+        });
+        
+        showSolutionBtn.addEventListener('click', function() {
+            showNotification('解答�?. 用户�? admin\' OR \'1\'=\'1\' -- 密码: 任意�?, 'info');
+        });
+        
+        resetBtn.addEventListener('click', function() {
+            resetModal.style.display = 'flex';
+        });
+        
+        closeModalBtn.addEventListener('click', function() {
+            resetModal.style.display = 'none';
+        });
+        
+        cancelResetBtn.addEventListener('click', function() {
+            resetModal.style.display = 'none';
+        });
+        
+        confirmResetBtn.addEventListener('click', function() {
+            showNotification('环境已重�?, 'success');
+            resetModal.style.display = 'none';
+        });
+        
+        submitFlagBtn.addEventListener('click', function() {
+            const flag = flagInput.value.trim();
+            if (flag.match(/flag\{.+\}/)) {
+                showNotification('Flag提交成功！恭喜完成挑战！', 'success');
+                } else {
+                showNotification('Flag格式错误或不正确，请重试', 'error');
+            }
+        });
+        
+        challengeLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.open(this.href, '_blank');
+        });
+        
+        // 当前靶机URL操作
+        document.getElementById('copy-url-btn').addEventListener('click', function() {
+            const urlValue = document.getElementById('current-url-value').textContent;
+            copyToClipboard(urlValue);
+        });
+
+        document.getElementById('open-url-btn').addEventListener('click', function() {
+            const urlValue = document.getElementById('current-url-value').textContent;
+            window.open(urlValue, '_blank');
+        });
+        
+        // 倒计时功�?        function startCountdown() {
+            let totalSeconds = 90 * 60; // 1小时30分钟
+            const countdownTimer = document.getElementById('countdown-timer');
+            
+            function updateTimer() {
+                const hours = Math.floor(totalSeconds / 3600);
+                const minutes = Math.floor((totalSeconds % 3600) / 60);
+                const seconds = totalSeconds % 60;
+                
+                countdownTimer.textContent = `${hours}小时${minutes.toString().padStart(2, '0')}�?{seconds.toString().padStart(2, '0')}秒`;
+                
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    showNotification('挑战时间已结�?, 'warning');
+                } else {
+                    totalSeconds--;
+                }
+            }
+            
+            updateTimer();
+            const timerInterval = setInterval(updateTimer, 1000);
+        }
+        
+        // 检查环境状�?        function checkStatus() {
+            fetch('index.php')
+                .then(response => {
+                    if (response.ok) {
+                        document.querySelector('.status-indicator').className = 'status-indicator status-online';
+                        document.querySelector('.status-indicator').nextElementSibling.textContent = '在线';
+                    } else {
+                        document.querySelector('.status-indicator').className = 'status-indicator status-offline';
+                        document.querySelector('.status-indicator').nextElementSibling.textContent = '离线';
+                    }
+                })
+                .catch(() => {
+                    document.querySelector('.status-indicator').className = 'status-indicator status-offline';
+                    document.querySelector('.status-indicator').nextElementSibling.textContent = '离线';
+                });
+        }
+        
+        // 页面加载时初始化
+        window.onload = function() {
+            startCountdown();
+            checkStatus();
+            setInterval(checkStatus, 30000);
+        };
+    </script>
+</body>
+</html> 

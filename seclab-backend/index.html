@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络安全实验平台 | CTF靶机控制�?/title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #334155;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 32px;
+            color: #38bdf8;
+        }
+        
+        .header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 16px;
+        }
+        
+        .labs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .lab-card {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border: 1px solid #334155;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .lab-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .lab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .lab-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #38bdf8;
+            margin: 0;
+        }
+        
+        .lab-status {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        
+        .status-online {
+            background-color: #10b981;
+        }
+        
+        .status-offline {
+            background-color: #ef4444;
+        }
+        
+        .lab-meta {
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+        
+        .lab-meta-item {
+            margin-bottom: 5px;
+        }
+        
+        .lab-meta-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 60px;
+            color: #cbd5e1;
+        }
+        
+        .lab-description {
+            margin-bottom: 15px;
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .lab-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.2s;
+            flex: 1;
+            min-width: 80px;
+        }
+        
+        .btn-primary {
+            background-color: #38bdf8;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2563eb;
+        }
+        
+        .btn-secondary {
+            background-color: #334155;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #475569;
+        }
+        
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background-color: #b91c1c;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .difficulty-easy {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .difficulty-medium {
+            background-color: #f59e0b;
+            color: #1f2937;
+        }
+        
+        .difficulty-hard {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .control-panel {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border: 1px solid #334155;
+        }
+        
+        .control-panel h2 {
+            margin-top: 0;
+            color: #38bdf8;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 10px;
+        }
+        
+        .control-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+        
+        .control-btn-success {
+            background-color: #10b981;
+            color: white;
+        }
+        
+        .control-btn-success:hover {
+            background-color: #059669;
+        }
+        
+        .control-btn-warning {
+            background-color: #f59e0b;
+            color: white;
+        }
+        
+        .control-btn-warning:hover {
+            background-color: #d97706;
+        }
+        
+        .control-btn-danger {
+            background-color: #ef4444;
+            color: white;
+        }
+        
+        .control-btn-danger:hover {
+            background-color: #dc2626;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 网络安全实验平台</h1>
+            <p>CTF靶机控制�?- 学习Web安全漏洞的实践环�?/p>
+        </div>
+        
+        <div class="labs-grid">
+            <!-- SQL注入实验 -->
+            <div class="lab-card">
+                <div class="lab-header">
+                    <h3 class="lab-title">SQL注入挑战</h3>
+                    <div class="lab-status">
+                        <span class="status-indicator status-online"></span>
+                        <span>在线</span>
+                    </div>
+                </div>
+                
+                <div class="lab-meta">
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">难度:</span>
+                        <span class="difficulty difficulty-easy">简�?/span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">端口:</span>
+                        <span>8091</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">类型:</span>
+                        <span>Web安全</span>
+                    </div>
+                </div>
+                
+                <div class="lab-description">
+                    学习SQL注入攻击技术，包括字符型注入、整数型注入和注释绕过。完�?个递进的挑战步骤�?
+                </div>
+                
+                <div class="lab-actions">
+                    <a href="sqli-lab/web/index.html" class="btn btn-primary" target="_blank">开始挑�?/a>
+                    <a href="http://192.168.1.106:8091" class="btn btn-secondary" target="_blank">直接访问</a>
+                </div>
+            </div>
+            
+            <!-- XSS实验 -->
+            <div class="lab-card">
+                <div class="lab-header">
+                    <h3 class="lab-title">XSS跨站脚本攻击</h3>
+                    <div class="lab-status">
+                        <span class="status-indicator status-online"></span>
+                        <span>在线</span>
+                    </div>
+                </div>
+                
+                <div class="lab-meta">
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">难度:</span>
+                        <span class="difficulty difficulty-medium">中等</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">端口:</span>
+                        <span>8092</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">类型:</span>
+                        <span>Web安全</span>
+                    </div>
+                </div>
+                
+                <div class="lab-description">
+                    学习XSS攻击技术，包括反射型XSS、事件处理器利用和Cookie窃取。通过留言板系统实践�?
+                </div>
+                
+                <div class="lab-actions">
+                    <a href="xss-lab/web/index.html" class="btn btn-primary" target="_blank">开始挑�?/a>
+                    <a href="http://192.168.1.106:8092" class="btn btn-secondary" target="_blank">直接访问</a>
+                </div>
+            </div>
+            
+            <!-- CSRF实验 -->
+            <div class="lab-card">
+                <div class="lab-header">
+                    <h3 class="lab-title">CSRF跨站请求伪�?/h3>
+                    <div class="lab-status">
+                        <span class="status-indicator status-online"></span>
+                        <span>在线</span>
+                    </div>
+                </div>
+                
+                <div class="lab-meta">
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">难度:</span>
+                        <span class="difficulty difficulty-medium">中等</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">端口:</span>
+                        <span>8093</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">类型:</span>
+                        <span>Web安全</span>
+                    </div>
+                </div>
+                
+                <div class="lab-description">
+                    学习CSRF攻击技术，包括恶意转账、Token绕过和批量攻击。通过银行系统实践�?
+                </div>
+                
+                <div class="lab-actions">
+                    <a href="csrf-lab/web/index.html" class="btn btn-primary" target="_blank">开始挑�?/a>
+                    <a href="http://192.168.1.106:8093" class="btn btn-secondary" target="_blank">直接访问</a>
+                </div>
+            </div>
+            
+            <!-- 文件上传实验 -->
+            <div class="lab-card">
+                <div class="lab-header">
+                    <h3 class="lab-title">文件上传漏洞</h3>
+                    <div class="lab-status">
+                        <span class="status-indicator status-online"></span>
+                        <span>在线</span>
+                    </div>
+                </div>
+                
+                <div class="lab-meta">
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">难度:</span>
+                        <span class="difficulty difficulty-hard">困难</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">端口:</span>
+                        <span>8094</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">类型:</span>
+                        <span>Web安全</span>
+                    </div>
+                </div>
+                
+                <div class="lab-description">
+                    学习文件上传漏洞，包括类型检查绕过、Web Shell上传和服务器控制。上传恶意文件实践�?
+                </div>
+                
+                <div class="lab-actions">
+                    <a href="file-upload-lab/web/index.html" class="btn btn-primary" target="_blank">开始挑�?/a>
+                    <a href="http://192.168.1.106:8094" class="btn btn-secondary" target="_blank">直接访问</a>
+                </div>
+            </div>
+            
+            <!-- 目录遍历实验 -->
+            <div class="lab-card">
+                <div class="lab-header">
+                    <h3 class="lab-title">目录遍历漏洞</h3>
+                    <div class="lab-status">
+                        <span class="status-indicator status-online"></span>
+                        <span>在线</span>
+                    </div>
+                </div>
+                
+                <div class="lab-meta">
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">难度:</span>
+                        <span class="difficulty difficulty-medium">中等</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">端口:</span>
+                        <span>8095</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">类型:</span>
+                        <span>Web安全</span>
+                    </div>
+                </div>
+                
+                <div class="lab-description">
+                    学习目录遍历漏洞，包括路径遍历、过滤绕过和敏感文件读取。访问任意文件实践�?
+                </div>
+                
+                <div class="lab-actions">
+                    <a href="directory-traversal-lab/web/index.html" class="btn btn-primary" target="_blank">开始挑�?/a>
+                    <a href="http://192.168.1.106:8095" class="btn btn-secondary" target="_blank">直接访问</a>
+                </div>
+            </div>
+            
+            <!-- 命令注入实验 -->
+            <div class="lab-card">
+                <div class="lab-header">
+                    <h3 class="lab-title">命令注入漏洞</h3>
+                    <div class="lab-status">
+                        <span class="status-indicator status-online"></span>
+                        <span>在线</span>
+                    </div>
+                </div>
+                
+                <div class="lab-meta">
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">难度:</span>
+                        <span class="difficulty difficulty-hard">困难</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">端口:</span>
+                        <span>8090</span>
+                    </div>
+                    <div class="lab-meta-item">
+                        <span class="lab-meta-label">类型:</span>
+                        <span>系统安全</span>
+                    </div>
+                </div>
+                
+                <div class="lab-description">
+                    学习命令注入漏洞，包括系统命令执行、管道符利用和权限提升。执行系统命令实践�?
+                </div>
+                
+                <div class="lab-actions">
+                    <a href="command-inject/files/index.html" class="btn btn-primary" target="_blank">开始挑�?/a>
+                    <a href="http://192.168.1.106:8090" class="btn btn-secondary" target="_blank">直接访问</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="control-panel">
+            <h2>🎛�?环境控制面板</h2>
+            <div class="control-actions">
+                <button class="control-btn control-btn-success" onclick="startAllLabs()">
+                    🚀 启动所有环�?
+                </button>
+                <button class="control-btn control-btn-warning" onclick="checkStatus()">
+                    📊 检查状�?
+                </button>
+                <button class="control-btn control-btn-danger" onclick="stopAllLabs()">
+                    🛑 停止所有环�?
+                </button>
+                <button class="control-btn control-btn-warning" onclick="rebuildAllLabs()">
+                    🔄 重建环境
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>⚠️ 安全警告：这些实验环境仅用于学习和研究目的，请勿在生产环境中使用�?/p>
+            <p>© 2024 网络安全实验平台 - 让安全学习更简�?/p>
+        </div>
+    </div>
+    
+    <script>
+        function startAllLabs() {
+            if (confirm('确定要启动所有实验环境吗�?)) {
+                alert('正在启动所有环�?..\n请等待几秒钟后刷新页面查看状态�?);
+                // 这里可以调用实际的启动脚�?
+            }
+        }
+        
+        function stopAllLabs() {
+            if (confirm('确定要停止所有实验环境吗�?)) {
+                alert('正在停止所有环�?..');
+                // 这里可以调用实际的停止脚�?
+            }
+        }
+        
+        function checkStatus() {
+            alert('正在检查环境状�?..\n请查看每个实验卡片的状态指示器�?);
+            // 这里可以调用实际的状态检查脚�?
+        }
+        
+        function rebuildAllLabs() {
+            if (confirm('确定要重建所有实验环境吗？这将清除所有数据�?)) {
+                alert('正在重建所有环�?..\n这可能需要几分钟时间�?);
+                // 这里可以调用实际的重建脚�?
+            }
+        }
+        
+        // 检查所有环境状�?
+        function checkAllStatus() {
+            const labs = [
+                { port: 8091, name: 'SQL注入' },
+                { port: 8092, name: 'XSS' },
+                { port: 8093, name: 'CSRF' },
+                { port: 8094, name: '文件上传' },
+                { port: 8095, name: '目录遍历' },
+                { port: 8090, name: '命令注入' }
+            ];
+            
+            labs.forEach(lab => {
+                fetch(`http://192.168.1.106:${lab.port}`)
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(`${lab.name} 环境在线`);
+                        } else {
+                            console.log(`${lab.name} 环境离线`);
+                        }
+                    })
+                    .catch(() => {
+                        console.log(`${lab.name} 环境离线`);
+                    });
+            });
+        }
+        
+        // 页面加载时检查状�?
+        window.onload = function() {
+            // 延迟检查，给环境启动时�?
+            setTimeout(checkAllStatus, 2000);
+        };
+    </script>
+</body>
+</html> 
+ 

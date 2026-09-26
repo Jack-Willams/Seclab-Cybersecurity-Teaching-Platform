@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目录遍历漏洞挑战 | CTF平台</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .current-url {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .current-url-label {
+            font-weight: bold;
+            color: #cbd5e1;
+        }
+        
+        .current-url-value {
+            color: #38bdf8;
+            font-family: monospace;
+        }
+        
+        .url-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .url-action-button {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .url-action-button:hover {
+            color: #e2e8f0;
+        }
+        
+        .challenge-header {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        
+        .challenge-header h1 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #38bdf8;
+            border-bottom: none;
+        }
+        
+        .challenge-meta {
+            margin-bottom: 15px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        
+        .challenge-meta-item {
+            margin-bottom: 10px;
+        }
+        
+        .challenge-meta-label {
+            font-weight: bold;
+            display: inline-block;
+            width: 80px;
+            color: #cbd5e1;
+        }
+        
+        .challenge-url {
+            background-color: #334155;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: monospace;
+            position: relative;
+            border: 1px solid #475569;
+        }
+        
+        .challenge-url .url-text {
+            cursor: pointer;
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        .challenge-url .url-text:hover {
+            text-decoration: underline;
+        }
+        
+        .action-buttons {
+            margin-top: 15px;
+        }
+        
+        .action-button {
+            background-color: #334155;
+            border: 1px solid #475569;
+            color: #cbd5e1;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+            transition: background-color 0.2s;
+        }
+        
+        .action-button:hover {
+            background-color: #475569;
+        }
+        
+        .action-button.danger {
+            color: #f87171;
+        }
+        
+        .action-button.danger:hover {
+            background-color: #7f1d1d;
+        }
+        
+        .action-button i {
+            margin-right: 6px;
+        }
+        
+        .challenge-content {
+            background-color: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+        }
+        
+        .challenge-desc {
+            margin-bottom: 20px;
+        }
+        
+        .challenge-desc p {
+            margin-top: 0;
+            color: #cbd5e1;
+        }
+        
+        .flag-submit {
+            margin-top: 20px;
+        }
+        
+        .flag-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+            background-color: #334155;
+            color: #e2e8f0;
+        }
+        
+        .submit-btn {
+            background-color: #38bdf8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .submit-btn:hover {
+            background-color: #2563eb;
+        }
+        
+        .hints {
+            background-color: #334155;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #475569;
+        }
+        
+        .hints h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #38bdf8;
+        }
+        
+        .hints ul {
+            margin-bottom: 0;
+            padding-left: 20px;
+            color: #cbd5e1;
+        }
+        
+        .icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: #1e293b;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #334155;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #38bdf8;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #94a3b8;
+        }
+        
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        .modal-btn {
+            padding: 6px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        
+        .modal-btn-cancel {
+            background-color: #475569;
+            color: #cbd5e1;
+        }
+        
+        .modal-btn-confirm {
+            background-color: #dc2626;
+            color: white;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online {
+            background-color: #10b981;
+        }
+        
+        .status-offline {
+            background-color: #ef4444;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .difficulty-medium {
+            background-color: #f59e0b;
+            color: #1f2937;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="current-url">
+            <span class="current-url-label">当前靶机URL:</span>
+            <span class="current-url-value" id="currentUrlValue">http://192.168.1.106:8095</span>
+            <div class="url-actions">
+                <button class="url-action-button" onclick="copyCurrentUrl()">
+                    <i class="icon">📋</i>复制
+                </button>
+                <button class="url-action-button" onclick="openCurrentUrl()">
+                    <i class="icon">🚀</i>打开
+                </button>
+            </div>
+        </div>
+        <div class="challenge-header">
+            <h1>目录遍历漏洞挑战</h1>
+            
+            <div class="challenge-meta">
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">难度:</span>
+                    <span class="difficulty difficulty-medium">中等</span>
+                </div>
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">状�?</span>
+                    <span class="status-indicator status-online"></span>
+                    <span>在线</span>
+                </div>
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">端口:</span>
+                    <span>8095</span>
+                </div>
+                <div class="challenge-meta-item">
+                    <span class="challenge-meta-label">类型:</span>
+                    <span>Web安全</span>
+                </div>
+            </div>
+            
+            <div class="challenge-url">
+                <span class="url-text" onclick="copyToClipboard('http://192.168.1.106:8095')">
+                    http://192.168.1.106:8095
+                </span>
+                <button class="action-button" onclick="copyToClipboard('http://192.168.1.106:8095')">
+                    <i class="icon">📋</i>复制
+                </button>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button" onclick="openChallenge()">
+                    <i class="icon">🚀</i>开始挑�?
+                </button>
+                <button class="action-button" onclick="showHints()">
+                    <i class="icon">💡</i>查看提示
+                </button>
+                <button class="action-button" onclick="showSolution()">
+                    <i class="icon">🔍</i>查看解答
+                </button>
+                <button class="action-button danger" onclick="resetChallenge()">
+                    <i class="icon">🔄</i>重置环境
+                </button>
+            </div>
+        </div>
+        
+        <div class="challenge-content">
+            <div class="challenge-desc">
+                <h3>挑战描述</h3>
+                <p>
+                    目录遍历漏洞允许攻击者访问服务器上的任意文件，包括敏感的系统文件�?
+                    在这个挑战中，你需要利用路径遍历技术读取系统文件，并最终获取Flag�?
+                </p>
+                
+                <h3>挑战目标</h3>
+                <ul>
+                    <li>完成3个递进的目录遍历挑战步�?/li>
+                    <li>学习路径遍历技�?/li>
+                    <li>掌握绕过路径过滤的方�?/li>
+                    <li>读取敏感文件获取信息</li>
+                    <li>获取最终的Flag</li>
+                </ul>
+                
+                <h3>技术要�?/h3>
+                <ul>
+                    <li>路径遍历技�?/li>
+                    <li>URL编码绕过</li>
+                    <li>双重编码绕过</li>
+                    <li>敏感文件读取</li>
+                </ul>
+            </div>
+            
+            <div class="flag-submit">
+                <h3>提交Flag</h3>
+                <input type="text" class="flag-input" id="flagInput" placeholder="输入Flag格式: flag{...}">
+                <button class="submit-btn" onclick="submitFlag()">提交</button>
+            </div>
+            
+            <div class="hints">
+                <h3>提示</h3>
+                <ul>
+                    <li>尝试使用 <code>../</code> 进行路径遍历</li>
+                    <li>使用URL编码绕过过滤</li>
+                    <li>尝试读取系统文件�?<code>/etc/passwd</code></li>
+                    <li>使用双重编码绕过WAF</li>
+                    <li>注意观察文件内容的变�?/li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 重置确认弹窗 -->
+    <div class="modal" id="resetModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>确认重置</h3>
+                <button class="modal-close" onclick="closeModal('resetModal')">&times;</button>
+            </div>
+            <p>确定要重置目录遍历实验环境吗？这将清除所有数据�?/p>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeModal('resetModal')">取消</button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmReset()">确认重置</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('已复制到剪贴�? ' + text);
+            }).catch(function(err) {
+                console.error('复制失败: ', err);
+            });
+        }
+        
+        function openChallenge() {
+            window.open('http://192.168.1.106:8095', '_blank');
+        }
+        
+        function showHints() {
+            alert('提示：\n1. 尝试访问 ../../../etc/passwd\n2. 使用URL编码 ..%2F..%2F..%2F\n3. 尝试读取包含Flag的文�?);
+        }
+        
+        function showSolution() {
+            alert('解答：\n1. 使用路径遍历读取系统文件\n2. 绕过路径过滤机制\n3. 读取敏感文件获取Flag');
+        }
+        
+        function resetChallenge() {
+            document.getElementById('resetModal').style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function confirmReset() {
+            alert('环境重置功能需要手动重启Docker容器');
+            closeModal('resetModal');
+        }
+        
+        function submitFlag() {
+            const flag = document.getElementById('flagInput').value;
+            if (flag.includes('flag{') && flag.includes('}')) {
+                alert('Flag提交成功！恭喜完成目录遍历挑战！');
+            } else {
+                alert('Flag格式错误，请检查后重新提交');
+            }
+        }
+        
+        function copyCurrentUrl() {
+            const currentUrlValue = document.getElementById('currentUrlValue').textContent;
+            copyToClipboard(currentUrlValue);
+        }
+
+        function openCurrentUrl() {
+            window.open('http://192.168.1.106:8095', '_blank');
+        }
+        
+        // 检查环境状�?
+        function checkStatus() {
+            fetch('http://192.168.1.106:8095')
+                .then(response => {
+                    if (response.ok) {
+                        document.querySelector('.status-indicator').className = 'status-indicator status-online';
+                        document.querySelector('.status-indicator').nextElementSibling.textContent = '在线';
+                    } else {
+                        document.querySelector('.status-indicator').className = 'status-indicator status-offline';
+                        document.querySelector('.status-indicator').nextElementSibling.textContent = '离线';
+                    }
+                })
+                .catch(() => {
+                    document.querySelector('.status-indicator').className = 'status-indicator status-offline';
+                    document.querySelector('.status-indicator').nextElementSibling.textContent = '离线';
+                });
+        }
+        
+        // 页面加载时检查状�?
+        window.onload = function() {
+            checkStatus();
+            // �?0秒检查一次状�?
+            setInterval(checkStatus, 30000);
+        };
+    </script>
+</body>
+</html> 
+ 

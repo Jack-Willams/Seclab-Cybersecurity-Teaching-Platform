@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "username": "王伟雪",
+    "avatar": "/student6.png",
+    "totalScore": 926,
+    "completedTasks": 20,
+    "class": "信息安全231班",
+    "rank": 1,
+    "recentActivity": {
+      "date": "2025-03-19",
+      "experimentName": "日志分析实验",
+      "score": 95
+    }
+  },
+  {
+    "id": 2,
+    "username": "徐建国",
+    "avatar": "/student7.png",
+    "totalScore": 889,
+    "completedTasks": 19,
+    "class": "网络安全231班",
+    "rank": 2,
+    "recentActivity": {
+      "date": "2025-03-15",
+      "experimentName": "SQL注入实验",
+      "score": 97
+    }
+  },
+  {
+    "id": 3,
+    "username": "林宗恒",
+    "avatar": "/example.png",
+    "totalScore": 874,
+    "completedTasks": 18,
+    "class": "网络安全232班",
+    "rank": 3,
+    "recentActivity": {
+      "date": "2025-03-20",
+      "experimentName": "逆向工程实验",
+      "score": 90
+    }
+  },
+  {
+    "id": 4,
+    "username": "赵建国",
+    "avatar": "/student8.png",
+    "totalScore": 864,
+    "completedTasks": 17,
+    "class": "物联网安全231班",
+    "rank": 4,
+    "recentActivity": {
+      "date": "2025-03-14",
+      "experimentName": "漏洞扫描实验",
+      "score": 91
+    }
+  },
+  {
+    "id": 5,
+    "username": "陈敏",
+    "avatar": "/student9.png",
+    "totalScore": 837,
+    "completedTasks": 16,
+    "class": "信息安全232班",
+    "rank": 5,
+    "recentActivity": {
+      "date": "2025-03-17",
+      "experimentName": "Web安全",
+      "score": 88
+    }
+  },
+  {
+    "id": 6,
+    "username": "徐杰晓薇",
+    "avatar": "/student10.png",
+    "totalScore": 820,
+    "completedTasks": 15,
+    "class": "物联网安全231班",
+    "rank": 6,
+    "recentActivity": {
+      "date": "2025-03-20",
+      "experimentName": "防火墙配置实验",
+      "score": 83
+    }
+  },
+  {
+    "id": 7,
+    "username": "徐航娜",
+    "avatar": "/student11.png",
+    "totalScore": 811,
+    "completedTasks": 14,
+    "class": "网络安全231班",
+    "rank": 7,
+    "recentActivity": {
+      "date": "2025-03-16",
+      "experimentName": "网络攻防",
+      "score": 85
+    }
+  },
+  {
+    "id": 8,
+    "username": "周杰",
+    "avatar": "/student12.png",
+    "totalScore": 796,
+    "completedTasks": 13,
+    "class": "信息安全231班",
+    "rank": 8,
+    "recentActivity": {
+      "date": "2025-03-18",
+      "experimentName": "密码学实验",
+      "score": 82
+    }
+  },
+  {
+    "id": 9,
+    "username": "李娜",
+    "avatar": "/student13.png",
+    "totalScore": 785,
+    "completedTasks": 12,
+    "class": "网络安全232班",
+    "rank": 9,
+    "recentActivity": {
+      "date": "2025-03-19",
+      "experimentName": "安全审计实验",
+      "score": 80
+    }
+  },
+  {
+    "id": 10,
+    "username": "张伟",
+    "avatar": "/student14.png",
+    "totalScore": 774,
+    "completedTasks": 11,
+    "class": "物联网安全232班",
+    "rank": 10,
+    "recentActivity": {
+      "date": "2025-03-20",
+      "experimentName": "入侵检测实验",
+      "score": 78
+    }
+  },
+  {
+    "id": 11,
+    "username": "王芳",
+    "avatar": "/student15.png",
+    "totalScore": 763,
+    "completedTasks": 10,
+    "class": "信息安全232班",
+    "rank": 11,
+    "recentActivity": {
+      "date": "2025-03-15",
+      "experimentName": "安全配置实验",
+      "score": 75
+    }
+  },
+  {
+    "id": 12,
+    "username": "刘洋",
+    "avatar": "/student16.png",
+    "totalScore": 752,
+    "completedTasks": 9,
+    "class": "网络安全231班",
+    "rank": 12,
+    "recentActivity": {
+      "date": "2025-03-16",
+      "experimentName": "漏洞利用实验",
+      "score": 73
+    }
+  },
+  {
+    "id": 13,
+    "username": "陈静",
+    "avatar": "/student17.png",
+    "totalScore": 741,
+    "completedTasks": 8,
+    "class": "物联网安全231班",
+    "rank": 13,
+    "recentActivity": {
+      "date": "2025-03-17",
+      "experimentName": "安全测试实验",
+      "score": 70
+    }
+  },
+  {
+    "id": 14,
+    "username": "杨帆",
+    "avatar": "/student18.png",
+    "totalScore": 730,
+    "completedTasks": 7,
+    "class": "信息安全231班",
+    "rank": 14,
+    "recentActivity": {
+      "date": "2025-03-18",
+      "experimentName": "安全评估实验",
+      "score": 68
+    }
+  },
+  {
+    "id": 15,
+    "username": "赵明",
+    "avatar": "/student19.png",
+    "totalScore": 719,
+    "completedTasks": 6,
+    "class": "网络安全232班",
+    "rank": 15,
+    "recentActivity": {
+      "date": "2025-03-19",
+      "experimentName": "安全加固实验",
+      "score": 65
+    }
+  }
+]

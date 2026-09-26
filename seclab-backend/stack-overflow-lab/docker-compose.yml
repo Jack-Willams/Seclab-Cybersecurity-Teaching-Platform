@@ -1,0 +1,15 @@
+services:
+  web:
+    container_name: stack-overflow-lab-web-1
+    image: stack-overflow-lab-web:latest
+    build: .
+    ports:
+      - "8096:70"
+    environment:
+      # 注入到 /home/ctf/flag，学生 getshell 后 cat flag 读取
+      - FLAG=flag{Trick_or_Treat_St4ck_0verfl0w}
+    networks:
+      - pwn-net
+
+networks:
+  pwn-net:

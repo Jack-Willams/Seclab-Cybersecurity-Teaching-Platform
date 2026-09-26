@@ -1,0 +1,178 @@
+[
+  {
+    "exampleQuestionId": "frontend-sqli-mcq-defense-001",
+    "title": "SQL注入防御措施识别",
+    "stem": "为了有效防止 SQL 注入，开发者应优先采用哪一类措施？",
+    "questionType": "MCQ",
+    "difficulty": 3,
+    "knowledgeTags": ["SQL注入", "Web安全", "参数化查询"],
+    "dimensionTags": ["knowledge_mastery"],
+    "standardAnswer": "使用参数化查询或预编译语句。",
+    "explanation": "参数化查询将 SQL 结构与用户输入分离，是 SQL 注入防御中的核心措施。",
+    "gradingRubric": [
+      {
+        "point": "能识别参数化查询或预编译语句是优先防护措施",
+        "score": 70
+      },
+      {
+        "point": "能说明其将查询结构与输入数据分离",
+        "score": 30
+      }
+    ],
+    "source": "module",
+    "sourceDocument": "SecLab-FrontEnd-2/src/data/SQLInjectionExperiment.js:220",
+    "qualityLevel": "MEDIUM",
+    "reviewed": false,
+    "moduleId": 1,
+    "courseId": 1,
+    "updatedAt": "2026-05-18T00:00:00Z"
+  },
+  {
+    "exampleQuestionId": "frontend-sqli-mcq-union-001",
+    "title": "联合查询注入类型识别",
+    "stem": "以下哪一种 SQL 注入类型主要利用 UNION 关键字合并查询结果？",
+    "questionType": "MCQ",
+    "difficulty": 3,
+    "knowledgeTags": ["SQL注入", "联合查询", "Web安全"],
+    "dimensionTags": ["knowledge_mastery"],
+    "standardAnswer": "联合查询注入。",
+    "explanation": "UNION 可将两个查询结果集合并，因此常用于联合查询注入场景的概念识别。",
+    "gradingRubric": [
+      {
+        "point": "能选出联合查询注入",
+        "score": 70
+      },
+      {
+        "point": "能说明 UNION 与结果集合并的关系",
+        "score": 30
+      }
+    ],
+    "source": "module",
+    "sourceDocument": "SecLab-FrontEnd-2/src/data/SQLInjectionExperiment.js:229",
+    "qualityLevel": "MEDIUM",
+    "reviewed": false,
+    "moduleId": 1,
+    "courseId": 1,
+    "updatedAt": "2026-05-18T00:00:00Z"
+  },
+  {
+    "exampleQuestionId": "frontend-xss-mcq-defense-001",
+    "title": "XSS防御最佳实践识别",
+    "stem": "在防御 XSS 时，哪些做法属于更可靠的基础防护？",
+    "questionType": "MCQ",
+    "difficulty": 2,
+    "knowledgeTags": ["XSS", "Web安全", "输出编码"],
+    "dimensionTags": ["knowledge_mastery"],
+    "standardAnswer": "对用户输入进行验证，并在输出时按上下文编码。",
+    "explanation": "XSS 防御需要输入验证与输出编码结合，避免未可信内容直接进入页面执行上下文。",
+    "gradingRubric": [
+      {
+        "point": "能识别输入验证与输出编码",
+        "score": 60
+      },
+      {
+        "point": "能说明防护目标是阻断脚本进入执行上下文",
+        "score": 40
+      }
+    ],
+    "source": "module",
+    "sourceDocument": "SecLab-FrontEnd-2/src/data/XSSExperiment.js:107",
+    "qualityLevel": "MEDIUM",
+    "reviewed": false,
+    "moduleId": 2,
+    "courseId": 2,
+    "updatedAt": "2026-05-18T00:00:00Z"
+  },
+  {
+    "exampleQuestionId": "frontend-xss-mcq-csp-001",
+    "title": "CSP作用识别",
+    "stem": "内容安全策略 CSP 的主要作用是什么？",
+    "questionType": "MCQ",
+    "difficulty": 2,
+    "knowledgeTags": ["XSS", "CSP", "Web安全"],
+    "dimensionTags": ["knowledge_mastery"],
+    "standardAnswer": "限制浏览器可加载和执行资源的来源。",
+    "explanation": "CSP 通过约束脚本、样式等资源来源，降低 XSS 等前端安全风险。",
+    "gradingRubric": [
+      {
+        "point": "能指出 CSP 限制资源来源",
+        "score": 70
+      },
+      {
+        "point": "能联系 XSS 防护场景说明其价值",
+        "score": 30
+      }
+    ],
+    "source": "module",
+    "sourceDocument": "SecLab-FrontEnd-2/src/data/XSSExperiment.js:116",
+    "qualityLevel": "MEDIUM",
+    "reviewed": false,
+    "moduleId": 2,
+    "courseId": 2,
+    "updatedAt": "2026-05-18T00:00:00Z"
+  },
+  {
+    "exampleQuestionId": "frontend-upload-mcq-defense-001",
+    "title": "文件上传类型校验策略",
+    "stem": "防御文件上传漏洞时，关于文件类型校验的更可靠做法是什么？",
+    "questionType": "MCQ",
+    "difficulty": 3,
+    "knowledgeTags": ["文件上传", "Web安全", "白名单"],
+    "dimensionTags": ["knowledge_mastery"],
+    "standardAnswer": "使用白名单限制允许的文件类型，并结合真实内容校验。",
+    "explanation": "仅依赖扩展名或黑名单容易被绕过，白名单和内容校验更适合作为基础防护。",
+    "gradingRubric": [
+      {
+        "point": "能识别白名单校验优先于黑名单",
+        "score": 50
+      },
+      {
+        "point": "能补充真实类型或内容校验",
+        "score": 30
+      },
+      {
+        "point": "能说明只查扩展名存在绕过风险",
+        "score": 20
+      }
+    ],
+    "source": "module",
+    "sourceDocument": "SecLab-FrontEnd-2/src/data/FileUploadExperiment.js:64",
+    "qualityLevel": "MEDIUM",
+    "reviewed": false,
+    "moduleId": 5,
+    "courseId": 5,
+    "updatedAt": "2026-05-18T00:00:00Z"
+  },
+  {
+    "exampleQuestionId": "frontend-upload-short-defense-001",
+    "title": "上传目录执行权限控制",
+    "stem": "为什么在文件上传防护中，需要限制上传目录的脚本执行权限？",
+    "questionType": "SHORT_ANSWER",
+    "difficulty": 3,
+    "knowledgeTags": ["文件上传", "Web安全", "执行权限"],
+    "dimensionTags": ["knowledge_mastery", "troubleshooting"],
+    "standardAnswer": "限制上传目录的脚本执行权限，可以避免被上传的脚本文件被服务器当作程序执行，从而降低远程代码执行风险。",
+    "explanation": "上传防护不仅要校验文件，还要控制存储位置和执行权限，形成多层防御。",
+    "gradingRubric": [
+      {
+        "point": "指出上传脚本被执行是核心风险",
+        "score": 40
+      },
+      {
+        "point": "说明禁用执行权限或隔离目录的作用",
+        "score": 40
+      },
+      {
+        "point": "能联系多层防御说明完整思路",
+        "score": 20
+      }
+    ],
+    "source": "module",
+    "sourceDocument": "SecLab-FrontEnd-2/src/data/FileUploadExperiment.js:89",
+    "qualityLevel": "MEDIUM",
+    "reviewed": false,
+    "moduleId": 5,
+    "courseId": 5,
+    "updatedAt": "2026-05-18T00:00:00Z"
+  }
+]

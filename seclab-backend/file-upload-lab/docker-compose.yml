@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  web:
+    container_name: file-upload-lab-web-1
+    build: .
+    ports:
+      - "8094:80"
+    depends_on:
+      - db
+    networks:
+      - upload-net
+    volumes:
+      - ./uploads:/var/www/html/uploads
+    environment:
+      - DB_HOST=db
+      - DB_NAME=upload_lab
+      - DB_USER=root
+      - DB_PASS=123456
+      - SECLAB_FILE_WATCHER_ENABLED=true
+      - SECLAB_AGENT_URL=http://host.docker.internal:8010
+      - SECLAB_FILE_WATCH_DIR=/var/www/html/uploads
+      - SECLAB_FILE_SOURCE=watcher
+      - SECLAB_CONTAINER_NAME=upload-lab-web-1
+      - SECLAB_MODULE_ID=5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  db:
+    container_name: file-upload-lab-db-1
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: upload_lab
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - upload-net
+
+volumes:
+  dbdata:
+
+networks:
+  upload-net:

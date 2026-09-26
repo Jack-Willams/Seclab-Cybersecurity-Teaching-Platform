@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: docker-service-test
+
+# 注意: 这个配置只用于测试环境
+# 如果要运行集成测试，请确保有一个可用的Docker守护进程
+# 如果没有，集成测试将被跳过 
